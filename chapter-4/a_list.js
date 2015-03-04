@@ -28,3 +28,23 @@ var listToArray = function(list) {
 }
 
 console.log("Turn List Into Array: %j", listToArray(arrayToList([1, 2, 3, 4, 5, 6])));
+
+var prepend = function(element, list) {
+  var new_list = {}
+  new_list["value"] = element;
+  new_list["rest"] = list;
+
+  return new_list;
+}
+
+console.log("Prepend element: %j", prepend(5, arrayToList([1, 2, 3, 4, 5, 6])));
+
+var nth = function(list, number) {
+  if(number === 1 || list["rest"] === null) {
+    return list["value"];
+  } else {
+    return nth(list["rest"], number - 1);
+  }
+}
+
+console.log("Nth recursive element: %j", nth(arrayToList([10, 6, 4, 5, 3, 2]), 3));
