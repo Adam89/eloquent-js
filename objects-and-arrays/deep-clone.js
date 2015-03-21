@@ -16,27 +16,43 @@ var deepComparisonOfObjects = function(valueOne, valueTwo) {
     return false;
   }
 
+
+
   for(var propOne in valueOne) {
-    closure(valueOne, valueTwo, propOne);
+    compareProperties(valueOne, valueTwo, propOne);
   }
 
   if(Object.keys(valueOne).length == collector.length) {
     return true;
+  } else {
+    return false
   }
 
-  function closure(valueOne, valueTwo, propOne)  {
+
+  function compareProperties(valueOne, valueTwo, propOne)  {
     for(var propTwo in valueTwo) {
-      if(propOne == propTwo && valueOne[propOne] == valueTwo[propTwo]) collector.push('not an important value');
+      if(propOne == propTwo && valueOne[propOne] == valueTwo[propTwo]) {
+        collector.push('not an important value');
+      } else if(typeof(valueOne[propOne]) == "object" && typeof(valueTwo[propTwo]) == "object") {
+        if (deepComparisonOfObjects(valueOne[propOne], valueTwo[propTwo])) {
+          collector.push('not an important value');
+        }
+      }
     }
   }
 }
 
 
 
-var listO = {a: 2, list: 1}
-var listB = {list: 1, a: 2}
-var ar = [1,2,3]
-var ab = [1,2,3]
-
-console.log(deepEqual(listO, listB));
-console.log(deepEqual(ar, ab));
+var obj = {here: {is: "an"}, object: 2};
+var obj2 = {here: {is: "an"}, object: obj};
+console.log(deepEqual(obj, obj));
+// → true
+console.log(deepEqual(obj, {here: 1, object: 2}));
+// → false
+console.log(deepEqual(obj, {here: {is: "an"}, object: 2}));
+// → true
+console.log(deepEqual(obj2, {here: {is: "an"}, object: obj}));
+// → true
+console.log(deepEqual(obj2, {here: {is: "an"}, object: obj, a: 2}));
+// → false
